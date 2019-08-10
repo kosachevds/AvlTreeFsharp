@@ -77,5 +77,12 @@ module private Node =
         | -2y -> bigRightRotate fixedP
         |_ -> fixedP
 
+    let rec insert root key =
+        let root' =
+            match (root, key) with
+            | (None, k) -> createWithKey k
+            | (Some r, k) when k < r.key -> setLeft r (Some(insert r.left k))
+            | (Some r, k) -> setRight r (Some(insert r.right k))
+        balance root'
 
 
