@@ -25,6 +25,7 @@ module private Node =
         match node with
         | None -> 0uy
         | Some x -> x.height
+        // TODO: cast to sbyte
 
     let bFactor node =
         sbyte(getHeight node.left) - sbyte(getHeight node.right)
@@ -48,11 +49,34 @@ module private Node =
         | None -> p
         | Some q -> setLeft q (Some(setRight p q.left))
 
+
+    let bigLeftRotate p =
+        let conditionalRotate node right =
+            if (bFactor right) < 0y then
+                setRight node (Some(rotateRight(right)))
+            else
+                node
+        match p.right with
+        | None -> p
+        | Some q -> rorateLeft (conditionalRotate p q)
+
+
+    let bigRightRotate p =
+        let conditionalRotate node left =
+            if (bFactor left) > 0y then
+                setLeft node (Some(rorateLeft left))
+            else
+                node
+        match p.left with
+        | None -> p
+        | Some q -> rotateRight (conditionalRotate p q)
+
     let balance p =
         let fixedP = fixHeight p
-        match (bFactor fixedP) with
-        | 2y -> 
-        | -2y ->
+        let pBFactor = bFactor fixedP
+        match pBFactor with
+        | 2y -> bigLeftRotate fixedP
+        | -2y -> bigRightRotate fixedP
         |_ -> fixedP
 
 
