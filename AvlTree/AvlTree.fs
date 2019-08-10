@@ -52,10 +52,9 @@ module private Node =
 
     let bigLeftRotate p =
         let conditionalRotate node right =
-            if (bFactor right) < 0y then
-                setRight node (Some(rotateRight(right)))
-            else
-                node
+            match (bFactor right) with
+            | x when x < 0y -> setRight node (Some(rotateRight(right)))
+            | _ -> node
         match p.right with
         | None -> p
         | Some q -> rorateLeft (conditionalRotate p q)
@@ -63,10 +62,9 @@ module private Node =
 
     let bigRightRotate p =
         let conditionalRotate node left =
-            if (bFactor left) > 0y then
-                setLeft node (Some(rorateLeft left))
-            else
-                node
+            match (bFactor left) with
+            | x when x > 0y -> setLeft node (Some(rorateLeft left))
+            | _ -> node
         match p.left with
         | None -> p
         | Some q -> rotateRight (conditionalRotate p q)
