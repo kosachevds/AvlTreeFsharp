@@ -21,18 +21,18 @@ module private Node =
     let setRight node right =
         create node.key node.height node.left right
 
-    let getHeight node =
+    let heightOrZero node =
         match node with
         | None -> 0uy
         | Some x -> x.height
         // TODO: cast to sbyte
 
     let bFactor node =
-        sbyte(getHeight node.left) - sbyte(getHeight node.right)
+        sbyte(heightOrZero node.left) - sbyte(heightOrZero node.right)
 
     let fixHeight node =
-        let left = getHeight node.left
-        let right = getHeight node.right
+        let left = heightOrZero node.left
+        let right = heightOrZero node.right
         {key=node.key; height=(max left right); left=node.left; right=node.right}
 
     let rotateRight p =
@@ -44,7 +44,7 @@ module private Node =
         | Some q -> setRight q (Some(setLeft p q.right))
         // | Some q -> Some (setRight q (setLeft p q.right))
 
-    let rorateLeft p =
+    let rotateLeft p =
         match p.right with
         | None -> p
         | Some q -> setLeft q (Some(setRight p q.left))
@@ -57,13 +57,13 @@ module private Node =
             | _ -> node
         match p.right with
         | None -> p
-        | Some q -> rorateLeft (conditionalRotate p q)
+        | Some q -> rotateLeft (conditionalRotate p q)
 
 
     let bigRightRotate p =
         let conditionalRotate node left =
             match (bFactor left) with
-            | x when x > 0y -> setLeft node (Some(rorateLeft left))
+            | x when x > 0y -> setLeft node (Some(rotateLeft left))
             | _ -> node
         match p.left with
         | None -> p
@@ -76,7 +76,6 @@ module private Node =
         | 2y -> bigLeftRotate fixedP
         | -2y -> bigRightRotate fixedP
         |_ -> fixedP
-
 
 
 
