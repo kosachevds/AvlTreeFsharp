@@ -105,3 +105,26 @@ module private Node =
         | (root, None) -> root.right // TODO: remove root.right ?
         | (root, Some left) -> Some (removeMinInLeftSubtree root left)
 
+    let rec remove root key =
+        let balanceToOption x =
+            Some (balance x)
+        let removeNode node =
+            let q = node.left
+            let r = node.right
+            match r with
+            | None -> q
+            | Some r -> (
+                         let minNode = findMin r
+                         let minNode' = setRight minNode (removeMin r)
+                         let minNode'' = setLeft minNode' q
+                         balanceToOption minNode''
+            )
+        let removeInSomeRoot root key =
+            match key with
+            | key when key < root.key -> balanceToOption (setLeft root (remove root.left key))
+            | key when key > root.key -> balanceToOption (setRight root (remove root.right key))
+            | _ -> removeNode root
+        match root with
+        | None -> None
+        | Some root -> removeInSomeRoot root key
+
