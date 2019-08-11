@@ -145,3 +145,6 @@ let remove tree key =
 let contains tree key =
     let node = Node.find tree.root key
     node.IsSome
+
+let getHeight tree =
+    Node.heightOrZero tree.root
