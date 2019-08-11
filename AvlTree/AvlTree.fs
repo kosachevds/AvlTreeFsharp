@@ -1,6 +1,6 @@
 module AvlTree
 
-module private Node =
+module Node =
     type Node<'a> = {
         key: 'a
         height: uint8
@@ -128,3 +128,10 @@ module private Node =
         | None -> None
         | Some root -> removeInSomeRoot root key
 
+type Tree<'a> = {
+    root: Node.Node<'a> option
+}
+
+let add tree key =
+    let newRoot = Node.insert tree.root key
+    {root=Some newRoot}
