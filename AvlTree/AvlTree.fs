@@ -85,4 +85,8 @@ module private Node =
             | (Some r, k) -> setRight r (Some(insert r.right k))
         balance root'
 
+    let rec findMin root =
+        match root.left with
+        | None -> root
+        | Some x -> findMin x
 
