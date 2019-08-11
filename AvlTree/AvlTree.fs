@@ -141,3 +141,7 @@ let add tree key =
 
 let remove tree key =
     create (Node.remove tree.root key)
+
+let contains tree key =
+    let node = Node.find tree.root key
+    node.IsSome
