@@ -132,6 +132,9 @@ type Tree<'a> = {
     root: Node.Node<'a> option
 }
 
+let create root =
+    {root=(Some root)}
+
 let add tree key =
     let newRoot = Node.insert tree.root key
-    {root=Some newRoot}
+    create newRoot
