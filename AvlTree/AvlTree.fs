@@ -90,3 +90,10 @@ module private Node =
         | None -> root
         | Some x -> findMin x
 
+    let rec find root key =
+        match root with
+        | None -> None
+        | Some root when key < root.key -> find root.left key
+        | Some root when key > root.key -> find root.right key
+        | _ -> root
+
