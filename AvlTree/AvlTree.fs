@@ -97,3 +97,11 @@ module private Node =
         | Some root when key > root.key -> find root.right key
         | _ -> root
 
+    let rec removeMin root =
+        let removeMinInLeftSubtree root left =
+            let root' = setLeft root (removeMin left)
+            balance root'
+        match (root, root.left) with
+        | (root, None) -> root.right // TODO: remove root.right ?
+        | (root, Some left) -> Some (removeMinInLeftSubtree root left)
+
