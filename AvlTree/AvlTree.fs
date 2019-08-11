@@ -133,8 +133,11 @@ type Tree<'a> = {
 }
 
 let create root =
-    {root=(Some root)}
+    {root=root}
 
 let add tree key =
     let newRoot = Node.insert tree.root key
-    create newRoot
+    create (Some newRoot)
+
+let remove tree key =
+    create (Node.remove tree.root key)
