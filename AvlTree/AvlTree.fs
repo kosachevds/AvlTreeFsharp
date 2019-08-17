@@ -132,7 +132,7 @@ type Tree<'a> = {
     root: Node.Node<'a> option
 }
 
-let createEmpty =
+let createEmpty() =
     {root=None}
 
 let create root =
