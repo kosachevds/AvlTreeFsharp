@@ -18,10 +18,9 @@ let timeRemove minCount maxCount step  =
         timer.ElapsedMilliseconds
     let timeRandomItemRemoving tree maxItem =
         executionTimeMsec (fun () -> removeRandom tree maxItem)
-    seq {minCount .. step .. (maxCount + 1)}
-    |>
-    Seq.map (
-        (fun x -> (10 * x, createRandomItemsTree x (10 * x))) >>
+    seq {for c in minCount .. step .. (maxCount + 1) -> (c * 10, c) }
+    |> Seq.map (
+        (fun (maxItem, count) -> (maxItem, (createRandomItemsTree count maxItem))) >>
         (fun (maxItem, tree) -> timeRandomItemRemoving tree maxItem)
         )
 
