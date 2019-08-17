@@ -4,22 +4,21 @@ module Node =
     type Node<'a> = {
         key: 'a
         height: uint8
-        mutable left: Node<'a> option
-        mutable right: Node<'a> option
+        left: Node<'a> option
+        right: Node<'a> option
     }
 
     let create key height left right =
         {key=key; height=height; left=left; right=right}
 
     let createWithKey key =
-        create key 1uy Option.None Option.None
+        create key 1uy None None
 
-    let setLeft node left =
-        create node.key node.height left node.right
-        // create node.key node.height left node.right
+    let setLeft node newLeft =
+        {node with left = newLeft}
 
-    let setRight node right =
-        create node.key node.height node.left right
+    let setRight node newRight =
+        {node with right = newRight}
 
     let heightOrZero node =
         match node with
@@ -31,9 +30,10 @@ module Node =
         sbyte(heightOrZero node.left) - sbyte(heightOrZero node.right)
 
     let fixHeight node =
-        let left = heightOrZero node.left
-        let right = heightOrZero node.right
-        {key=node.key; height=(max left right); left=node.left; right=node.right}
+        let leftHeight = heightOrZero node.left
+        let rightHeight = heightOrZero node.right
+        let maxHeight = max leftHeight rightHeight
+        {node with height = maxHeight + 1uy}
 
     let rotateRight p =
         // TODO: try to remade
