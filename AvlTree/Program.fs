@@ -24,9 +24,12 @@ let timeRemove minCount maxCount step  =
         (fun (maxItem, tree) -> timeRandomItemRemoving tree maxItem)
         )
 
+let writeToFile filename =
+    Seq.cast<string> >> (fun items -> System.IO.File.AppendAllLines(filename, items))
+
 
 [<EntryPoint>]
 let main argv =
-
-    printfn "%A" argv
+    let times = timeRemove 100 10000 100
+    writeToFile "times.txt" times
     0 // return an integer exit code
