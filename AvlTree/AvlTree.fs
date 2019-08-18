@@ -61,7 +61,7 @@ module Node =
         let bigLeftRotate node =
             let conditionalRotate node right =
                 match (bFactor right) with
-                | x when x < 0y -> setRight node (Some(rotateRight right))
+                | x when x < 0y -> setSomeRight node (rotateRight right)
                 | _ -> node
             match node.right with
             | None -> node
@@ -87,7 +87,7 @@ module Node =
         let insertToSubtree root key =
             match key with
             | k when k < root.key -> setSomeLeft root (insert root.left k)
-            | k -> setRight root (Some(insert root.right k))
+            | k -> setSomeRight root (insert root.right k)
         match root with
         | None -> createWithKey key
         | Some r -> balance (insertToSubtree r key)
