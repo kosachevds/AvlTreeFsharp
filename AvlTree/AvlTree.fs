@@ -78,12 +78,13 @@ module Node =
         |_ -> fixedP
 
     let rec insert root key =
-        let root' =
-            match (root, key) with
-            | (None, k) -> createWithKey k
-            | (Some r, k) when k < r.key -> setLeft r (Some(insert r.left k))
-            | (Some r, k) -> setRight r (Some(insert r.right k))
-        balance root'
+        let insertToSubtree root key =
+            match key with
+            | k when k < root.key -> setLeft root (Some(insert root.left k))
+            | k -> setRight root (Some(insert root.right k))
+        match root with
+        | None -> createWithKey key
+        | Some r -> balance (insertToSubtree r key)
 
     let rec findMin root =
         match root.left with
