@@ -36,18 +36,20 @@ module Node =
         {node with height = maxHeight + 1uy}
 
     let rotateRight p =
-        // TODO: try to remade
-        let setPLeft =
-            setLeft p
+        let rotate p q =
+            let p' = Some (fixHeight (setLeft p q.right))
+            fixHeight (setRight q p')
         match p.left with
-        | None -> p  // TODO: or what?
-        | Some q -> setRight q (Some(setLeft p q.right))
-        // | Some q -> Some (setRight q (setLeft p q.right))
-
-    let rotateLeft p =
-        match p.right with
         | None -> p
-        | Some q -> setLeft q (Some(setRight p q.left))
+        | Some q -> rotate p q
+
+    let rotateLeft q =
+        let rotate q p =
+            let q' = Some (fixHeight (setRight q p.left))
+            fixHeight (setLeft p q')
+        match q.right with
+        | None -> q
+        | Some p -> rotate q p
 
 
     let bigLeftRotate p =
@@ -73,8 +75,8 @@ module Node =
         let fixedP = fixHeight p
         let pBFactor = bFactor fixedP
         match pBFactor with
-        | -2y -> bigLeftRotate fixedP
-        | 2y -> bigRightRotate fixedP
+        | 2y -> bigLeftRotate fixedP
+        | -2y -> bigRightRotate fixedP
         |_ -> fixedP
 
     let rec insert root key =
