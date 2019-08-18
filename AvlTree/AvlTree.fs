@@ -73,8 +73,8 @@ module Node =
         let fixedP = fixHeight p
         let pBFactor = bFactor fixedP
         match pBFactor with
-        | 2y -> bigLeftRotate fixedP
-        | -2y -> bigRightRotate fixedP
+        | -2y -> bigLeftRotate fixedP
+        | 2y -> bigRightRotate fixedP
         |_ -> fixedP
 
     let rec insert root key =
