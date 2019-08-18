@@ -17,8 +17,14 @@ module Node =
     let setLeft node newLeft =
         {node with left = newLeft}
 
+    let setSomeLeft node newLeft =
+        setLeft node (Some newLeft)
+
     let setRight node newRight =
         {node with right = newRight}
+
+    let setSomeRight node newRight =
+        setRight node (Some newRight)
 
     let heightOrZero node =
         match node with
