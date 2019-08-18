@@ -1,7 +1,8 @@
 let random = System.Random()
 
 let createTreeWithItems =
-    Seq.fold AvlTree.add AvlTree.createEmpty
+    let emptyTree = AvlTree.createEmpty()
+    Seq.fold AvlTree.add emptyTree
 
 let getRandomSeq itemCount maxItem =
     Seq.init itemCount (fun _ -> random.Next(maxItem))
@@ -29,7 +30,8 @@ let timeRemove minCount maxCount step  =
         )
 
 let writeToFile filename =
-    Seq.cast<string> >> (fun items -> System.IO.File.AppendAllLines(filename, items))
+    Seq.map string >> (fun x -> System.IO.File.WriteAllLines(filename, x))
+
 
 let testAdd() =
     let items = getRandomSeq 100 1000 |> Seq.toList
@@ -37,11 +39,21 @@ let testAdd() =
     let good = items |> List.forall (AvlTree.contains tree)
     System.Diagnostics.Debug.Assert(good, "Tree is not good")
 
+let getHeights maxCount =
+    seq {0 .. maxCount}
+    // getRandomSeq maxCount (maxCount * 10)
+    |> Seq.scan AvlTree.add (AvlTree.createEmpty())
+    |> Seq.map AvlTree.getHeight
+
 [<EntryPoint>]
 let main argv =
-    testAdd()
-    let times = timeRemove 1000 10000 1000 |> Seq.toList
-    times
-    |> Seq.iter (fun x -> printfn "%d" x)
-    // writeToFile "times.txt" times
-    0 // return an integer exit code
+    // testAdd()
+
+    getHeights 100
+    |> writeToFile "heights.txt"
+
+    // let times = timeRemove 1000 10000 1000 |> Seq.toList
+    // times
+    // |> Seq.iter (fun x -> printfn "%d" x)
+    // // writeToFile "times.txt" times
+    0
