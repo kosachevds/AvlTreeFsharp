@@ -27,7 +27,7 @@ module Node =
         // TODO: cast to sbyte
 
     let bFactor node =
-        sbyte(heightOrZero node.left) - sbyte(heightOrZero node.right)
+        sbyte(heightOrZero node.right) - sbyte(heightOrZero node.left)
 
     let fixHeight node =
         let leftHeight = heightOrZero node.left
