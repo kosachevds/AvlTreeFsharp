@@ -35,47 +35,47 @@ module Node =
         let maxHeight = max leftHeight rightHeight
         {node with height = maxHeight + 1uy}
 
-    let rotateRight p =
-        let rotate p q =
-            let p' = Some (fixHeight (setLeft p q.right))
-            fixHeight (setRight q p')
-        match p.left with
-        | None -> p
-        | Some q -> rotate p q
+    let rotateRight node =
+        let rotate node leftChild =
+            let node' = Some (fixHeight (setLeft node leftChild.right))
+            fixHeight (setRight leftChild node')
+        match node.left with
+        | None -> node
+        | Some leftChild -> rotate node leftChild
 
-    let rotateLeft q =
-        let rotate q p =
-            let q' = Some (fixHeight (setRight q p.left))
-            fixHeight (setLeft p q')
-        match q.right with
-        | None -> q
-        | Some p -> rotate q p
+    let rotateLeft node =
+        let rotate node rightChild =
+            let node' = Some (fixHeight (setRight node rightChild.left))
+            fixHeight (setLeft rightChild node')
+        match node.right with
+        | None -> node
+        | Some rightChild -> rotate node rightChild
 
-    let balance p =
-        let bigLeftRotate p =
+    let balance node =
+        let bigLeftRotate node =
             let conditionalRotate node right =
                 match (bFactor right) with
-                | x when x < 0y -> setRight node (Some(rotateRight(right)))
+                | x when x < 0y -> setRight node (Some(rotateRight right))
                 | _ -> node
-            match p.right with
-            | None -> p
-            | Some q -> rotateLeft (conditionalRotate p q)
+            match node.right with
+            | None -> node
+            | Some rightChild -> rotateLeft (conditionalRotate node rightChild)
 
-        let bigRightRotate p =
+        let bigRightRotate node =
             let conditionalRotate node left =
                 match (bFactor left) with
                 | x when x > 0y -> setLeft node (Some(rotateLeft left))
                 | _ -> node
-            match p.left with
-            | None -> p
-            | Some q -> rotateRight (conditionalRotate p q)
+            match node.left with
+            | None -> node
+            | Some leftChild -> rotateRight (conditionalRotate node leftChild)
 
-        let fixedP = fixHeight p
-        let pBFactor = bFactor fixedP
+        let node' = fixHeight node
+        let pBFactor = bFactor node'
         match pBFactor with
-        | 2y -> bigLeftRotate fixedP
-        | -2y -> bigRightRotate fixedP
-        |_ -> fixedP
+        | 2y -> bigLeftRotate node'
+        | -2y -> bigRightRotate node'
+        |_ -> node'
 
     let rec insert root key =
         let insertToSubtree root key =
