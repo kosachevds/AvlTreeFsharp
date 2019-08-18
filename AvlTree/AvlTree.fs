@@ -51,27 +51,25 @@ module Node =
         | None -> q
         | Some p -> rotate q p
 
-
-    let bigLeftRotate p =
-        let conditionalRotate node right =
-            match (bFactor right) with
-            | x when x < 0y -> setRight node (Some(rotateRight(right)))
-            | _ -> node
-        match p.right with
-        | None -> p
-        | Some q -> rotateLeft (conditionalRotate p q)
-
-
-    let bigRightRotate p =
-        let conditionalRotate node left =
-            match (bFactor left) with
-            | x when x > 0y -> setLeft node (Some(rotateLeft left))
-            | _ -> node
-        match p.left with
-        | None -> p
-        | Some q -> rotateRight (conditionalRotate p q)
-
     let balance p =
+        let bigLeftRotate p =
+            let conditionalRotate node right =
+                match (bFactor right) with
+                | x when x < 0y -> setRight node (Some(rotateRight(right)))
+                | _ -> node
+            match p.right with
+            | None -> p
+            | Some q -> rotateLeft (conditionalRotate p q)
+
+        let bigRightRotate p =
+            let conditionalRotate node left =
+                match (bFactor left) with
+                | x when x > 0y -> setLeft node (Some(rotateLeft left))
+                | _ -> node
+            match p.left with
+            | None -> p
+            | Some q -> rotateRight (conditionalRotate p q)
+
         let fixedP = fixHeight p
         let pBFactor = bFactor fixedP
         match pBFactor with
