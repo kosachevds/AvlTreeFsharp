@@ -43,16 +43,16 @@ module Node =
 
     let rotateRight node =
         let rotate node leftChild =
-            let node' = Some (fixHeight (setLeft node leftChild.right))
-            fixHeight (setRight leftChild node')
+            let node' = fixHeight (setLeft node leftChild.right)
+            fixHeight (setSomeRight leftChild node')
         match node.left with
         | None -> node
         | Some leftChild -> rotate node leftChild
 
     let rotateLeft node =
         let rotate node rightChild =
-            let node' = Some (fixHeight (setRight node rightChild.left))
-            fixHeight (setLeft rightChild node')
+            let node' = fixHeight (setRight node rightChild.left)
+            fixHeight (setSomeLeft rightChild node')
         match node.right with
         | None -> node
         | Some rightChild -> rotate node rightChild
@@ -70,7 +70,7 @@ module Node =
         let bigRightRotate node =
             let conditionalRotate node left =
                 match (bFactor left) with
-                | x when x > 0y -> setLeft node (Some(rotateLeft left))
+                | x when x > 0y -> setSomeLeft node (rotateLeft left)
                 | _ -> node
             match node.left with
             | None -> node
@@ -86,7 +86,7 @@ module Node =
     let rec insert root key =
         let insertToSubtree root key =
             match key with
-            | k when k < root.key -> setLeft root (Some(insert root.left k))
+            | k when k < root.key -> setSomeLeft root (insert root.left k)
             | k -> setRight root (Some(insert root.right k))
         match root with
         | None -> createWithKey key
@@ -113,7 +113,9 @@ module Node =
         | (root, Some left) -> Some (removeMinInLeftSubtree root left)
 
     let rec remove root key =
+        // TODO: remade
         let balanceToOption x =
+            // balance >> Some
             Some (balance x)
         let removeNode node =
             let q = node.left
