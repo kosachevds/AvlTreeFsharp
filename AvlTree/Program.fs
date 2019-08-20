@@ -52,16 +52,17 @@ let testRemove itemsCount =
         AvlTree.contains tree item
     let good =
         items
-        |> Seq.map (removeItemAndCheckContains >> not)
-        |> Seq.forall id
+        |> Seq.map removeItemAndCheckContains
+        |> Seq.forall not
     System.Diagnostics.Debug.Assert(good, "Tree remove is not good")
 
 [<EntryPoint>]
 let main argv =
     // testAdd()
-
-    getHeights 100
-    |> writeToFile "heights.txt"
+    testRemove 1_000_000
+    printfn "%s" "Tests are passed"
+    // getHeights 100
+    // |> writeToFile "heights.txt"
 
     // let times = timeRemove 1000 10000 1000 |> Seq.toList
     // times
