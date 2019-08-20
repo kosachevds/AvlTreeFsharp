@@ -32,7 +32,6 @@ let timeRemove minCount maxCount step  =
 let writeToFile filename =
     Seq.map string >> (fun x -> System.IO.File.WriteAllLines(filename, x))
 
-
 let testAdd() =
     let items = getRandomSeq 100 1000 |> Seq.toList
     let tree = createTreeWithItems items
@@ -44,6 +43,18 @@ let getHeights maxCount =
     // getRandomSeq maxCount (maxCount * 10)
     |> Seq.scan AvlTree.add (AvlTree.createEmpty())
     |> Seq.map AvlTree.getHeight
+
+let testRemove itemsCount =
+    let items = {0 .. itemsCount}
+    let mutable tree = createTreeWithItems items
+    let removeItemAndCheckContains item =
+        tree <- AvlTree.remove tree item
+        AvlTree.contains tree item
+    let good =
+        items
+        |> Seq.map (removeItemAndCheckContains >> not)
+        |> Seq.forall id
+    System.Diagnostics.Debug.Assert(good, "Tree remove is not good")
 
 [<EntryPoint>]
 let main argv =
