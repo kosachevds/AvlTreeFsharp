@@ -6,6 +6,7 @@
   <ItemGroup>
     <Compile Include="AvlTree.fs" />
     <None Include="App.config" />
+    <Compile Include="TreeFactory.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
