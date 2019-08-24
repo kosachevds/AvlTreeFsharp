@@ -15,13 +15,14 @@ let removeRandom tree maxItem =
     AvlTree.remove tree (random.Next(maxItem))
 
 let timeRemove minCount maxCount step  =
-    let executionTimeMsec func =
+    let executionTimeTicks func =
         let timer = System.Diagnostics.Stopwatch()
         timer.Start()
-        let temp = func()
-        timer.ElapsedMilliseconds
+        func() |> ignore
+        timer.Stop()
+        timer.ElapsedTicks
     let timeRandomItemRemoving tree maxItem =
-        executionTimeMsec (fun () -> removeRandom tree maxItem)
+        executionTimeTicks (fun () -> removeRandom tree maxItem)
     seq {for c in minCount .. step .. (maxCount + 1) -> (c * 10, c) }
     |> Seq.toList
     |> List.map (
@@ -30,7 +31,7 @@ let timeRemove minCount maxCount step  =
         )
 
 let writeToFile filename =
-    Seq.map string >> (fun x -> System.IO.File.WriteAllLines(filename, x))
+    (Seq.map string) >> (fun x -> System.IO.File.WriteAllLines(filename, x))
 
 let testAdd() =
     let items = getRandomSeq 100 1000 |> Seq.toList
@@ -46,26 +47,27 @@ let getHeights maxCount =
 
 let testRemove itemsCount =
     let items = {0 .. itemsCount}
-    let mutable tree = createTreeWithItems items
-    let removeItemAndCheckContains item =
-        tree <- AvlTree.remove tree item
-        AvlTree.contains tree item
-    let good =
+    let success =
         items
-        |> Seq.map removeItemAndCheckContains
+        |> Seq.scan AvlTree.remove (AvlTree.createEmpty())
+        |> Seq.zip items
+        |> Seq.map (fun (item, tree) -> AvlTree.contains tree item)
         |> Seq.forall not
-    System.Diagnostics.Debug.Assert(good, "Tree remove is not good")
+    System.Diagnostics.Debug.Assert(success, "Tree remove is not good")
+
 
 [<EntryPoint>]
 let main argv =
     // testAdd()
     testRemove 1_000_000
+    // testRemoveDeep 1_000_000
     printfn "%s" "Tests are passed"
+
     // getHeights 100
     // |> writeToFile "heights.txt"
 
-    // let times = timeRemove 1000 10000 1000 |> Seq.toList
-    // times
-    // |> Seq.iter (fun x -> printfn "%d" x)
-    // // writeToFile "times.txt" times
+    // timeRemove 1000 10000 100
+    // |> Seq.toList
+    // // |> Seq.iter (fun x -> printfn "%d" x)
+    // |> writeToFile "times.txt"
     0
