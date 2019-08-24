@@ -55,12 +55,32 @@ let testRemove itemsCount =
         |> Seq.forall not
     System.Diagnostics.Debug.Assert(success, "Tree remove is not good")
 
+let testRemoveDeep itemsCount =
+    let items = {0 .. itemsCount} |> Seq.toList
+    let success =
+        items
+        |> Seq.scan AvlTree.remove (AvlTree.createEmpty())
+        |> Seq.zip (items |> Seq.mapi (fun i x -> (i, x)))
+        |> Seq.map (
+            fun ((index, item), tree) ->
+            (
+                let containsItem = AvlTree.contains tree item
+                let containsAllNext =
+                    items
+                    |> Seq.skip index
+                    |> Seq.forall (AvlTree.contains tree)
+                (not containsItem) && containsAllNext
+            )
+        )
+        |> Seq.forall id
+    System.Diagnostics.Debug.Assert(success, "Tree remove is not good")
+
 
 [<EntryPoint>]
 let main argv =
     // testAdd()
-    testRemove 1_000_000
-    // testRemoveDeep 1_000_000
+    // testRemove 1_000_000
+    testRemoveDeep 1_000_000
     printfn "%s" "Tests are passed"
 
     // getHeights 100
