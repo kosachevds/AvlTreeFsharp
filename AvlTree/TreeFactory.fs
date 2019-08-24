@@ -2,7 +2,7 @@ module TreeFactory
 
 let private random = System.Random()
 
-let createTreeWithItems =
+let createWithItems =
     let emptyTree = AvlTree.createEmpty()
     Seq.fold AvlTree.add emptyTree
 
@@ -11,4 +11,4 @@ let getRandomSeq itemCount maxItem =
 
 let createRandomItemsTree itemCount maxItem =
     getRandomSeq itemCount maxItem
-    |> createTreeWithItems
+    |> createWithItems

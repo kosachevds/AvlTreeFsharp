@@ -24,7 +24,7 @@ let writeToFile filename =
 
 let testAdd() =
     let items = TreeFactory.getRandomSeq 100 1000 |> Seq.toList
-    let tree = TreeFactory.createTreeWithItems items
+    let tree = TreeFactory.createWithItems items
     let good = items |> List.forall (AvlTree.contains tree)
     System.Diagnostics.Debug.Assert(good, "Tree is not good")
 
@@ -36,7 +36,7 @@ let getHeights maxCount =
 
 let testRemove itemsCount =
     let items = {0 .. itemsCount}
-    let tree = TreeFactory.createTreeWithItems items
+    let tree = TreeFactory.createWithItems items
     let checkContains (item, tree) =
         AvlTree.contains tree item
     let temp =
