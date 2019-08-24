@@ -12,14 +12,16 @@ let writeHeights filename count =
     Tests.getHeights count
     |> writeToFile filename
 
+let printRemovingTime minCount maxCount countStep =
+    let printIntLn = printfn "%d"
+    Tests.timeRemoving minCount maxCount countStep
+    |> (Seq.iter printIntLn)
+
 [<EntryPoint>]
 let main argv =
     runTests 10
 
     writeHeights "heights.txt" 100
 
-    Tests.timeRemoving 1000 10000 100
-    // |> List.toSeq
-    |> Seq.iter (fun x -> printfn "%d" x)
-    // |> writeToFile "times.txt"
+    printRemovingTime 10 100 10
     0
