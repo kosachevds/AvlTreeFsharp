@@ -4,7 +4,7 @@ let writeToFile filename =
 
 [<EntryPoint>]
 let main argv =
-    Tests.adding()
+    Tests.adding 10000
     Tests.removing 10
     Tests.removingDeep 10
     printfn "%s" "Tests are passed"

@@ -2,11 +2,13 @@ module Tests
 
 let private random = System.Random()
 
-let adding() =
-    let items = TreeFactory.getRandomSeq 100 1000 |> Seq.toList
+let adding itemsCount =
+    let items =
+        TreeFactory.getRandomSeq itemsCount (10 * itemsCount)
+        |> Seq.toList
     let tree = TreeFactory.createWithItems items
     let good = items |> List.forall (AvlTree.contains tree)
-    System.Diagnostics.Debug.Assert(good, "Tree is not good")
+    System.Diagnostics.Debug.Assert(good, "Tree adding is not good")
 
 let removing itemsCount =
     let items = {0 .. itemsCount}
