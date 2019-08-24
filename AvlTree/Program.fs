@@ -4,15 +4,15 @@ let writeToFile filename =
 
 [<EntryPoint>]
 let main argv =
-    Tests.testAdd()
-    Tests.testRemove 10
-    Tests.testRemoveDeep 10
+    Tests.adding()
+    Tests.removing 10
+    Tests.removingDeep 10
     printfn "%s" "Tests are passed"
 
     Tests.getHeights 100
     |> writeToFile "heights.txt"
 
-    Tests.timeRemove 1000 10000 100
+    Tests.timeRemoving 1000 10000 100
     // |> List.toSeq
     |> Seq.iter (fun x -> printfn "%d" x)
     // |> writeToFile "times.txt"
