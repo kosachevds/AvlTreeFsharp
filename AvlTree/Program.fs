@@ -47,13 +47,15 @@ let getHeights maxCount =
 
 let testRemove itemsCount =
     let items = {0 .. itemsCount}
-    let success =
+    let tree = createTreeWithItems items
+    let removeItemAndCheckContains item =
+        let tree' = AvlTree.remove tree item
+        AvlTree.contains tree' item
+    let good =
         items
-        |> Seq.scan AvlTree.remove (AvlTree.createEmpty())
-        |> Seq.zip items
-        |> Seq.map (fun (item, tree) -> AvlTree.contains tree item)
+        |> Seq.map removeItemAndCheckContains
         |> Seq.forall not
-    System.Diagnostics.Debug.Assert(success, "Tree remove is not good")
+    System.Diagnostics.Debug.Assert(good, "Tree remove is not good")
 
 let testRemoveDeep itemsCount =
     let items = {0 .. itemsCount} |> Seq.toList
@@ -79,8 +81,8 @@ let testRemoveDeep itemsCount =
 [<EntryPoint>]
 let main argv =
     // testAdd()
-    // testRemove 1_000_000
-    testRemoveDeep 1_000_000
+    testRemove 10
+    // testRemoveDeep 10
     printfn "%s" "Tests are passed"
 
     // getHeights 100
