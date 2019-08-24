@@ -8,12 +8,15 @@ let runTests itemsCount =
     // Tests.removingDeep itemsCount
     printfn "%s" "Tests are passed"
 
+let writeHeights filename count =
+    Tests.getHeights count
+    |> writeToFile filename
+
 [<EntryPoint>]
 let main argv =
     runTests 10
 
-    Tests.getHeights 100
-    |> writeToFile "heights.txt"
+    writeHeights "heights.txt" 100
 
     Tests.timeRemoving 1000 10000 100
     // |> List.toSeq
