@@ -12,6 +12,11 @@ let writeHeights filename count =
     Tests.getHeights count
     |> writeToFile filename
 
+// let writeRemovingTime filename minCount maxCount countStep =
+//     let times = Tests.timeRemoving minCount maxCount countStep
+//     // |> List.toSeq
+//     // |> writeToFile filename
+
 let printRemovingTime minCount maxCount countStep =
     let printIntLn = printfn "%d"
     Tests.timeRemoving minCount maxCount countStep
