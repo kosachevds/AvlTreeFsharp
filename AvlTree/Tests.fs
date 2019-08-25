@@ -68,7 +68,7 @@ let timeRemoving minCount maxCount step  =
     seq {for c in minCount .. step .. (maxCount + 1) -> (c * 10, c) }
     |> Seq.toList
     |> List.map (
-        (fun (maxItem, count) -> (maxItem, (TreeFactory.createRandomItemsTree count maxItem))) >>
+        (fun (maxItem, count) -> (maxItem, (TreeFactory.createWithRandomItems count maxItem))) >>
         (fun (maxItem, tree) -> timeRandomItemRemoving tree maxItem)
         )
 

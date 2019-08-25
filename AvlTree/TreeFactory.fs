@@ -9,6 +9,6 @@ let createWithItems =
 let getRandomSeq itemCount maxItem =
     Seq.init itemCount (fun _ -> random.Next(maxItem))
 
-let createRandomItemsTree itemCount maxItem =
+let createWithRandomItems itemCount maxItem =
     getRandomSeq itemCount maxItem
     |> createWithItems
