@@ -53,9 +53,6 @@ let removingDeep itemsCount =
     System.Diagnostics.Debug.Assert(success, "Tree remove is not good")
 
 
-let removeRandom tree maxItem =
-    AvlTree.remove tree (random.Next(maxItem))
-
 let timeRemoving minCount maxCount step  =
     let executionTimeTicks func =
         let timer = System.Diagnostics.Stopwatch()
@@ -63,14 +60,20 @@ let timeRemoving minCount maxCount step  =
         func() |> ignore
         timer.Stop()
         timer.ElapsedTicks
-    let timeRandomItemRemoving tree maxItem =
-        executionTimeTicks (fun () -> removeRandom tree maxItem)
-    seq {for c in minCount .. step .. (maxCount + 1) -> (c * 10, c) }
-    |> Seq.toList
-    |> List.map (
-        (fun (maxItem, count) -> (maxItem, (TreeFactory.createWithRandomItems count maxItem))) >>
-        (fun (maxItem, tree) -> timeRandomItemRemoving tree maxItem)
-        )
+    let timeRandomItemRemoving tree =
+        let item = random.Next()
+        executionTimeTicks (fun () -> AvlTree.remove tree item)
+    let createTree itemCount =
+        TreeFactory.createWithRandomItems itemCount System.Int32.MaxValue
+
+    let counts =
+        [minCount]  // repeat first for strange large time in first launch
+        |> List.toSeq
+        |> Seq.append (seq {minCount .. step .. (maxCount + 1) })
+    counts
+    |> Seq.map (createTree >> timeRandomItemRemoving)
+    |> Seq.skip 1  // skip first because strange large time
+
 
 let getHeights maxCount =
     seq {0 .. maxCount}
