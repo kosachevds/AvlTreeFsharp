@@ -1,6 +1,8 @@
 
-let writeToFile filename =
-    (Seq.map string) >> (fun x -> System.IO.File.WriteAllLines(filename, x))
+let writeToFile<'a> filename (items: seq<'a>) =
+    items
+    |> Seq.map (fun x -> x.ToString())
+    |> fun x -> System.IO.File.WriteAllLines(filename, x)
 
 let runTests itemsCount =
     Tests.adding itemsCount
