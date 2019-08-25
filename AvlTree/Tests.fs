@@ -24,22 +24,32 @@ let removing itemsCount =
 
 let removingDeep itemsCount =
     let items = {0 .. itemsCount} |> Seq.toList
-    let success =
+    let getItemsExceptIndex i =
+        let tail =
+            items
+            |> Seq.take i
         items
-        |> Seq.scan AvlTree.remove (AvlTree.createEmpty())
-        |> Seq.zip (items |> Seq.mapi (fun i x -> (i, x)))
-        |> Seq.map (
-            fun ((index, item), tree) ->
-            (
-                let containsItem = AvlTree.contains tree item
-                let containsAllNext =
-                    items
-                    |> Seq.skip index
-                    |> Seq.forall (AvlTree.contains tree)
-                (not containsItem) && containsAllNext
-            )
-        )
-        |> Seq.forall id
+        |> Seq.skip (i + 1)
+        |> Seq.append tail
+
+    let treeContainsAll tree =
+        Seq.forall (AvlTree.contains tree)
+
+    let tree = TreeFactory.createWithItems items
+    let trees =
+        items
+        |> Seq.map (AvlTree.remove tree)
+        |> Seq.toList
+    let containsRemovedItems =
+        trees
+        |> Seq.zip items
+        |> Seq.forall (fun (x, tree) -> AvlTree.contains tree x)
+    let containsOtherItems =
+        items
+        |> Seq.mapi (fun i _ -> getItemsExceptIndex i)
+        |> Seq.zip trees
+        |> Seq.forall (fun (tree, others) -> treeContainsAll tree others)
+    let success = not(containsRemovedItems) && containsOtherItems
     System.Diagnostics.Debug.Assert(success, "Tree remove is not good")
 
 
