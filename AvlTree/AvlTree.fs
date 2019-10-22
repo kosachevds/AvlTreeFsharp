@@ -110,11 +110,12 @@ module Node =
 
     let rec removeMin root =
         let removeMinInLeftSubtree root left =
-            let root' = setLeft root (removeMin left)
-            balance root'
-        match (root, root.left) with
-        | (root, None) -> root.right // TODO: remove root.right ?
-        | (root, Some left) -> Some (removeMinInLeftSubtree root left)
+            removeMin left
+            |> setLeft root
+            |> balance
+        match root.left with
+        | None -> root.right // TODO: remove root.right ?
+        | Some left -> removeMinInLeftSubtree root left |> Some
 
     let rec remove root key =
         // TODO: remade
