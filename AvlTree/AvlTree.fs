@@ -128,8 +128,12 @@ module Node =
             | Some r -> (
                          // TODO: ??; remade
                          let minNode = findMin r
-                         let minNode' = removeMin r |> setRight minNode
-                         setLeft minNode' q
+                         let minNode' =
+                            r
+                            |> removeMin
+                            |> setRight minNode
+                         q
+                         |> setLeft minNode'
                          |> balance
                          |> Some
             )
