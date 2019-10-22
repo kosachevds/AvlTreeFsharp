@@ -119,24 +119,24 @@ module Node =
 
     let rec remove root key =
         // TODO: remade
-        let balanceToOption x =
-            // balance >> Some
-            Some (balance x)
+        let balanceToOption = balance >> Some
         let removeNode node =
             let q = node.left
             let r = node.right
             match r with
             | None -> q
             | Some r -> (
+                         // TODO: ??; remade
                          let minNode = findMin r
-                         let minNode' = setRight minNode (removeMin r)
-                         let minNode'' = setLeft minNode' q
-                         balanceToOption minNode''
+                         let minNode' = removeMin r |> setRight minNode
+                         setLeft minNode' q
+                         |> balance
+                         |> Some
             )
-        let removeInSomeRoot root key =
-            match key with
-            | key when key < root.key -> balanceToOption (setLeft root (remove root.left key))
-            | key when key > root.key -> balanceToOption (setRight root (remove root.right key))
+        let removeInSomeRoot root =
+            function
+            | key when (key < root.key) -> remove root.left key |> setLeft root |> balance |> Some
+            | key when (key > root.key) -> remove root.right key |> setRight root |> balance |> Some
             | _ -> removeNode root
         match root with
         | None -> None
