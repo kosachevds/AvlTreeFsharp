@@ -109,13 +109,11 @@ module Node =
         | _ -> root
 
     let rec removeMin root =
-        let removeMinInLeftSubtree root left =
-            removeMin left
-            |> setLeft root
-            |> balance
+        let removeMinInLeftSubtree root =
+            removeMin >> setLeft root >> balance >> Some
         match root.left with
         | None -> root.right // TODO: remove root.right ?
-        | Some left -> removeMinInLeftSubtree root left |> Some
+        | Some left -> removeMinInLeftSubtree root left
 
     let rec remove root key =
         // TODO: remade
