@@ -90,11 +90,11 @@ module Node =
     let rec insert root key =
         let insertToSubtree root key =
             match key with
-            | k when k < root.key -> setSomeLeft root (insert root.left k)
-            | k -> setSomeRight root (insert root.right k)
+            | k when (k < root.key) -> insert root.left k |> setSomeLeft root
+            | _ -> insert root.right key |> setSomeRight root
         match root with
         | None -> createWithKey key
-        | Some r -> balance (insertToSubtree r key)
+        | Some r -> insertToSubtree r key |> balance
 
     let rec findMin root =
         match root.left with
