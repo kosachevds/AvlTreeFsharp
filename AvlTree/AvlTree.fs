@@ -152,8 +152,9 @@ let create root =
     {root=root}
 
 let add tree key =
-    let newRoot = Node.insert tree.root key
-    create (Some newRoot)
+    Node.insert tree.root key
+    |> Some
+    |> create
 
 let remove tree key =
     create (Node.remove tree.root key)
