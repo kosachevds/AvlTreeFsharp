@@ -74,11 +74,11 @@ module Node =
         let bigRightRotate node =
             let conditionalRotate node left =
                 match (bFactor left) with
-                | x when x > 0y -> setSomeLeft node (rotateLeft left)
+                | x when (x > 0y) -> rotateLeft left |> setSomeLeft node
                 | _ -> node
             match node.left with
             | None -> node
-            | Some leftChild -> rotateRight (conditionalRotate node leftChild)
+            | Some leftChild -> conditionalRotate node leftChild |> rotateRight
 
         let node' = fixHeight node
         let pBFactor = bFactor node'
