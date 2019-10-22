@@ -3,10 +3,10 @@ import sys
 from matplotlib import pyplot as pp
 
 
-def main():
-    if len(sys.argv) < 2:
+def main(args):
+    if len(args) < 2:
         return
-    values = read_values(sys.argv[1])
+    values = read_values(args[1])
     plot_values(values)
 
     pp.show()
@@ -15,13 +15,14 @@ def main():
 def read_values(filename):
     with open(filename, "rt") as fin:
         lines = fin.readlines()
-    lines = [l for l in lines if l and l != "\n"]
-    return [int(l) for l in lines]
+    lines = [line for line in lines if line and line != "\n"]
+    return list(map(int, lines))
 
 
 def plot_values(values):
     pp.figure()
     pp.plot(values)
 
+
 if __name__ == "__main__":
-    main()
+    main(sys.argv)
