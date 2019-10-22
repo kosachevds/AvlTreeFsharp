@@ -119,10 +119,8 @@ module Node =
         // TODO: remade
         let balanceToOption = balance >> Some
         let removeNode node =
-            let q = node.left
-            let r = node.right
-            match r with
-            | None -> q
+            match node.right with
+            | None -> node.left
             | Some r -> (
                          // TODO: ??; remade
                          let minNode = findMin r
@@ -130,15 +128,15 @@ module Node =
                             r
                             |> removeMin
                             |> setRight minNode
-                         q
+                         node.left
                          |> setLeft minNode'
                          |> balance
                          |> Some
             )
         let removeInSomeRoot root =
             function
-            | key when (key < root.key) -> remove root.left key |> setLeft root |> balance |> Some
-            | key when (key > root.key) -> remove root.right key |> setRight root |> balance |> Some
+            | key when (key < root.key) -> key |> remove root.left |> setLeft root |> balance |> Some
+            | key when (key > root.key) -> key |> remove root.right |> setRight root |> balance |> Some
             | _ -> removeNode root
         match root with
         | None -> None
