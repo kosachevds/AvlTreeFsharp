@@ -65,11 +65,11 @@ module Node =
         let bigLeftRotate node =
             let conditionalRotate node right =
                 match (bFactor right) with
-                | x when x < 0y -> setSomeRight node (rotateRight right)
+                | x when (x < 0y) -> rotateRight right |> setSomeRight node
                 | _ -> node
             match node.right with
             | None -> node
-            | Some rightChild -> rotateLeft (conditionalRotate node rightChild)
+            | Some rightChild -> conditionalRotate node rightChild |> rotateLeft
 
         let bigRightRotate node =
             let conditionalRotate node left =
