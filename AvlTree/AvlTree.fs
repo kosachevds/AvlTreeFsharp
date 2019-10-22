@@ -43,8 +43,10 @@ module Node =
 
     let rotateRight node =
         let rotate node leftChild =
-            let node' = fixHeight (setLeft node leftChild.right)
-            fixHeight (setSomeRight leftChild node')
+            setLeft node leftChild.right
+            |> fixHeight
+            |> setSomeRight leftChild
+            |> fixHeight
         match node.left with
         | None -> node
         | Some leftChild -> rotate node leftChild
