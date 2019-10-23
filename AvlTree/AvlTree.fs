@@ -26,6 +26,10 @@ module Node =
     let setSomeRight node =
         Some >> setRight node
 
+    let getLeft x = x.left
+
+    let getRight x = x.right
+
     let heightOrZero node =
         match node with
         | None -> 0uy
@@ -81,8 +85,7 @@ module Node =
             | Some leftChild -> conditionalRotate node leftChild |> rotateRight
 
         let node' = fixHeight node
-        let pBFactor = bFactor node'
-        match pBFactor with
+        match (bFactor node') with
         | 2y -> bigLeftRotate node'
         | -2y -> bigRightRotate node'
         |_ -> node'
