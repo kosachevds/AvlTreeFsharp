@@ -26,6 +26,7 @@ module Node =
     let setSomeRight node =
         Some >> setRight node
 
+
     let getLeft x = x.left
 
     let getRight x = x.right
@@ -90,14 +91,14 @@ module Node =
         | -2y -> bigRightRotate node'
         |_ -> node'
 
-    let rec insert root key =
-        let insertToSubtree root key =
-            match key with
+    let rec insert root =
+        let insertToSubtree root =
+            function
             | k when (k < root.key) -> insert root.left k |> setSomeLeft root
-            | _ -> insert root.right key |> setSomeRight root
+            | k -> insert root.right k |> setSomeRight root
         match root with
-        | None -> createWithKey key
-        | Some r -> insertToSubtree r key |> balance
+        | None -> createWithKey
+        | Some r -> insertToSubtree r >> balance
 
     let rec findMin root =
         match root.left with
