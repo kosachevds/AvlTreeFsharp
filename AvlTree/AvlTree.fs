@@ -26,7 +26,6 @@ module Node =
     let setSomeRight node =
         Some >> setRight node
 
-
     let getLeft x = x.left
 
     let getRight x = x.right
@@ -91,6 +90,11 @@ module Node =
         | -2y -> bigRightRotate node'
         |_ -> node'
 
+    let balanceToOption node =
+        node
+        |> balance
+        |> Some
+
     let rec insert root =
         let insertToSubtree root =
             function
@@ -114,14 +118,13 @@ module Node =
 
     let rec removeMin root =
         let removeMinInLeftSubtree root =
-            removeMin >> setLeft root >> balance >> Some
+            removeMin >> setLeft root >> balanceToOption
         match root.left with
         | None -> root.right // TODO: remove root.right ?
         | Some left -> removeMinInLeftSubtree root left
 
     let rec remove root key =
         // TODO: remade
-        let balanceToOption = balance >> Some
         let removeNode node =
             match node.right with
             | None -> node.left
@@ -134,13 +137,12 @@ module Node =
                             |> setRight minNode
                          node.left
                          |> setLeft minNode'
-                         |> balance
-                         |> Some
+                         |> balanceToOption
             )
         let removeInSomeRoot root =
             function
-            | key when (key < root.key) -> key |> remove root.left |> setLeft root |> balance |> Some
-            | key when (key > root.key) -> key |> remove root.right |> setRight root |> balance |> Some
+            | key when (key < root.key) -> key |> remove root.left |> setLeft root |> balanceToOption
+            | key when (key > root.key) -> key |> remove root.right |> setRight root |> balanceToOption
             | _ -> removeNode root
         match root with
         | None -> None
