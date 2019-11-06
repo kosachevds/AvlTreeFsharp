@@ -124,21 +124,20 @@ module Node =
         | Some left -> removeMinInLeftSubtree root left
 
     let rec remove root key =
-        // TODO: remade
+        let removeNodeWithSomeRight node right =
+            // TODO: ??; remade
+            let minNode = findMin right
+            let minNode' =
+               right
+               |> removeMin
+               |> setRight minNode
+            node.left
+            |> setLeft minNode'
+            |> balanceToOption
         let removeNode node =
             match node.right with
             | None -> node.left
-            | Some r -> (
-                         // TODO: ??; remade
-                         let minNode = findMin r
-                         let minNode' =
-                            r
-                            |> removeMin
-                            |> setRight minNode
-                         node.left
-                         |> setLeft minNode'
-                         |> balanceToOption
-            )
+            | Some r -> removeNodeWithSomeRight node r
         let removeInSomeRoot root =
             function
             | key when (key < root.key) -> key |> remove root.left |> setLeft root |> balanceToOption
