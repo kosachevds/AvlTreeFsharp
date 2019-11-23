@@ -34,7 +34,6 @@ module Node =
         match node with
         | None -> 0uy
         | Some x -> x.height
-        // TODO: cast to sbyte
 
     let bFactor node =
         sbyte(heightOrZero node.right) - sbyte(heightOrZero node.left)
@@ -117,35 +116,26 @@ module Node =
         | _ -> root
 
     let rec removeMin root =
-        let removeMinInLeftSubtree root =
+        let removeLeftMin root =
             removeMin >> setLeft root >> balanceToOption
         match root.left with
         | None -> root.right // TODO: remove root.right ?
-        | Some left -> removeMinInLeftSubtree root left
+        | Some left -> removeLeftMin root left
 
     let rec remove root key =
-        let removeNodeWithSomeRight node right =
-            // TODO: ??; remade
-            let minNode = findMin right
-            let minNode' =
-               right
-               |> removeMin
-               |> setRight minNode
-            node.left
-            |> setLeft minNode'
+        let replaceWithRightMin node right =
+            let rightMin = findMin right
+            { rightMin with left = node.left; right = (removeMin right) }
             |> balanceToOption
         let removeNode node =
             match node.right with
             | None -> node.left
-            | Some r -> removeNodeWithSomeRight node r
-        let removeInSomeRoot root =
-            function
-            | key when (key < root.key) -> key |> remove root.left |> setLeft root |> balanceToOption
-            | key when (key > root.key) -> key |> remove root.right |> setRight root |> balanceToOption
-            | _ -> removeNode root
+            | Some r -> replaceWithRightMin node r
         match root with
+        | Some root when (key < root.key) -> key |> remove root.left |> setLeft root |> balanceToOption
+        | Some root when (key > root.key) -> key |> remove root.right |> setRight root |> balanceToOption
+        | Some root -> root.left
         | None -> None
-        | Some root -> removeInSomeRoot root key
 
 type Tree<'a> = {
     root: Node.Node<'a> option
